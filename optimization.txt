@@ -1,0 +1,83 @@
+MariaDB [optimization]> CREATE TABLE employees (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     department VARCHAR(50),
+    ->     salary DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.016 sec)
+
+MariaDB [optimization]> SELECT * FROM employees WHERE department = 'Engineering' AND salary > 50000;
+Empty set (0.001 sec)
+
+MariaDB [optimization]> SELECT name, salary FROM employees WHERE department = 'Engineering' AND salary > 50000;
+Empty set (0.001 sec)
+
+MariaDB [optimization]> CREATE INDEX idx_department_salary ON employees (department, salary);
+Query OK, 0 rows affected (0.021 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [optimization]> CREATE TABLE orders (
+    ->     order_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     customer_id INT,
+    ->     order_date DATE,
+    ->     total DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [optimization]> CREATE INDEX idx_customer_id ON orders (customer_id);
+Query OK, 0 rows affected (0.047 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [optimization]> CREATE INDEX idx_customer_date ON orders (customer_id, order_date);
+Query OK, 0 rows affected (0.017 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [optimization]> SELECT * FROM orders WHERE customer_id = 123 AND order_date >= '2024-01-01';
+Empty set (0.001 sec)
+
+MariaDB [optimization]> CREATE TABLE departments (
+    ->     department_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     department_name VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.014 sec)
+
+MariaDB [optimization]> CREATE TABLE employees (
+    ->     employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     department_id INT,
+    ->     salary DECIMAL(10, 2),
+    ->     FOREIGN KEY (department_id) REFERENCES departments(department_id)
+    -> );
+ERROR 1050 (42S01): Table 'employees' already exists
+MariaDB [optimization]> CREATE TABLE employees (
+    ->     employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     department_name VARCHAR(50),
+    ->     salary DECIMAL(10, 2)
+    -> );
+ERROR 1050 (42S01): Table 'employees' already exists
+MariaDB [optimization]> SET GLOBAL query_cache_size = 1048576;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [optimization]> SET GLOBAL query_cache_type = ON;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [optimization]> CREATE TABLE customers (
+    ->     customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.014 sec)
+
+MariaDB [optimization]> CREATE TABLE orders (
+    ->     order_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     customer_id INT,
+    ->     order_date DATE,
+    ->     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    -> );
+ERROR 1050 (42S01): Table 'orders' already exists
+MariaDB [optimization]> CREATE INDEX idx_customer_id ON orders (customer_id);
+ERROR 1061 (42000): Duplicate key name 'idx_customer_id'
+MariaDB [optimization]> eixt
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'eixt' at line 1
+MariaDB [optimization]> exit
