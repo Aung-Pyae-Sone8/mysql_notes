@@ -1,0 +1,23 @@
+MariaDB [isolation_level]> create table items (id int auto_increment primary key, name varchar(100), quantity int);
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [isolation_level]> insert into items (name, quantity) values ('items1', 10);
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [isolation_level]> insert into items (name, quantity) values ('items2', 20);
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [isolation_level]> set session transaction isolation level read uncommitted;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> update items set quantity = quantity + 5 where id = 1;
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [isolation_level]> commit;
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [isolation_level]> notee;

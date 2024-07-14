@@ -1,0 +1,21 @@
+MariaDB [isolation_level]> set session transaction isolation level serializable;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> start transaction:
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':' at line 1
+MariaDB [isolation_level]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> select * from items where id = 1;
++----+--------+----------+
+| id | name   | quantity |
++----+--------+----------+
+|  1 | items1 |       30 |
++----+--------+----------+
+1 row in set (0.000 sec)
+
+MariaDB [isolation_level]> commit;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> notee;

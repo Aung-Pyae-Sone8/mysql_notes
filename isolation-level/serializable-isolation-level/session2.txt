@@ -1,0 +1,11 @@
+MariaDB [isolation_level]> set session transaction isolation level serializable;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> update items set quantity = quantity + 5 where id = 1;
+Query OK, 1 row affected (9.908 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [isolation_level]> notee;

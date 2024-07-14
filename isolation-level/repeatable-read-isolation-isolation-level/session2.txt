@@ -1,0 +1,21 @@
+MariaDB [isolation_level]> set session transaction isolation level repeatable read;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> update items set quantity = quantity + 5 where id = 1;
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [isolation_level]> commit;
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [isolation_level]> commit;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> update items set quantity = quantity + 5 where id = 1;
+Query OK, 1 row affected (0.011 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [isolation_level]> notee;

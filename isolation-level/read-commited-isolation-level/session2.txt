@@ -1,0 +1,23 @@
+MariaDB [isolation_level]> set session transaction isolation level read committed;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [isolation_level]> select * from items where id = 1;
++----+--------+----------+
+| id | name   | quantity |
++----+--------+----------+
+|  1 | items1 |       15 |
++----+--------+----------+
+1 row in set (0.001 sec)
+
+MariaDB [isolation_level]> select * from items where id = 1;
++----+--------+----------+
+| id | name   | quantity |
++----+--------+----------+
+|  1 | items1 |       20 |
++----+--------+----------+
+1 row in set (0.001 sec)
+
+MariaDB [isolation_level]> notee;
