@@ -1,0 +1,43 @@
+MariaDB [trigger_test]> create table employees (id int auto_increment primary key, name varchar(255), position varchar(255), last_modified datetime);
+Query OK, 0 rows affected (0.041 sec)
+
+MariaDB [trigger_test]> delimiter $$ 
+MariaDB [trigger_test]> create trigger
+    -> before_employee_update
+    -> before update on employees
+    -> for each row
+    -> begin
+    -> set new.last_modified = now();
+    -> end $$
+Query OK, 0 rows affected (0.040 sec)
+
+MariaDB [trigger_test]> delimiter ;
+MariaDB [trigger_test]> insert into employees (name, position) values ('Alice', 'Developer');
+Query OK, 1 row affected (0.038 sec)
+
+MariaDB [trigger_test]> insert into employees (name, position) values ('Bob', 'Manager');
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [trigger_test]> select * from employees;
++----+-------+-----------+---------------+
+| id | name  | position  | last_modified |
++----+-------+-----------+---------------+
+|  1 | Alice | Developer | NULL          |
+|  2 | Bob   | Manager   | NULL          |
++----+-------+-----------+---------------+
+2 rows in set (0.000 sec)
+
+MariaDB [trigger_test]> update employees set position = 'Senior Developer' where name = 'Alice';
+Query OK, 1 row affected (0.038 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [trigger_test]> select * from employees;
++----+-------+------------------+---------------------+
+| id | name  | position         | last_modified       |
++----+-------+------------------+---------------------+
+|  1 | Alice | Senior Developer | 2024-07-14 19:55:43 |
+|  2 | Bob   | Manager          | NULL                |
++----+-------+------------------+---------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [trigger_test]> exit

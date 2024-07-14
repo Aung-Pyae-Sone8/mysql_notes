@@ -1,0 +1,42 @@
+MariaDB [procedure_test]> create table employees (id int auto_increment primary key, name varchar(255), position varchar(255));
+Query OK, 0 rows affected (0.042 sec)
+
+MariaDB [procedure_test]> delimiter $$
+MariaDB [procedure_test]> create procedure add_employee(in emp_name varchar(255), in emp_position varchar(255), out total_employees int)
+    -> begin
+    -> insert into employees (name, position) values (emp_name, emp_position);
+    -> select count(*) into total_employees from employees;
+    -> end $$
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [procedure_test]> delimiter ;
+MariaDB [procedure_test]> set @total_employees = 0;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [procedure_test]> call add_employee('Alice', 'Developer', @total_employees);
+Query OK, 2 rows affected (0.011 sec)
+
+MariaDB [procedure_test]> select @total_employees as total_employees;
++-----------------+
+| total_employees |
++-----------------+
+|               1 |
++-----------------+
+1 row in set (0.000 sec)
+
+MariaDB [procedure_test]> call add_employees('Bob', 'Manager', @total_employees);
+ERROR 1305 (42000): PROCEDURE procedure_test.add_employees does not exist
+MariaDB [procedure_test]> call add_employee('Bob', 'Manager', @total_employees);
+Query OK, 2 rows affected (0.037 sec)
+
+MariaDB [procedure_test]> select @total_employees as total_employees;
++-----------------+
+| total_employees |
++-----------------+
+|               2 |
++-----------------+
+1 row in set (0.000 sec)
+
+MariaDB [procedure_test]> exit
+Bye
+
