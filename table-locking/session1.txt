@@ -1,0 +1,25 @@
+MariaDB [table_locking]> create table bank_account (id int auto_increment primary key, balance decimal(10, 2));
+Query OK, 0 rows affected (0.042 sec)
+
+MariaDB [table_locking]> insert into bank_account (balance) values (100.00);
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [table_locking]> lock tables bank_account write;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [table_locking]> select * from bank_account;
++----+---------+
+| id | balance |
++----+---------+
+|  1 |  100.00 |
++----+---------+
+1 row in set (0.000 sec)
+
+MariaDB [table_locking]> update bank_account set balance = balance + 50.00 where id = 1;
+Query OK, 1 row affected (0.011 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [table_locking]> unlock tables;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [table_locking]> exit
