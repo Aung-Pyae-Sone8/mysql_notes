@@ -1,0 +1,27 @@
+MariaDB [concurrency_problem]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [concurrency_problem]> select balance from bank_account where id = 1;
++---------+
+| balance |
++---------+
+|  100.00 |
++---------+
+1 row in set (0.001 sec)
+
+MariaDB [concurrency_problem]> update bank_account set balance = 70.00 where id = 1;
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [concurrency_problem]> commit;
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [concurrency_problem]> select balance from bank_account where id = 1;
++---------+
+| balance |
++---------+
+|   70.00 |
++---------+
+1 row in set (0.001 sec)
+
+MariaDB [concurrency_problem]> exit
