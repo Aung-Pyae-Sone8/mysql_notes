@@ -1,0 +1,53 @@
+MariaDB [deadlock_test]> create table accounts (id int auto_increment primary key, balance decimal(10, 2));
+Query OK, 0 rows affected (0.015 sec)
+
+MariaDB [deadlock_test]> insert into accounts (balance) values (100.00);
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [deadlock_test]> insert into accounts (balance) values (200.00);
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [deadlock_test]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [deadlock_test]> select balance from accounts where id = 1 for update;
++---------+
+| balance |
++---------+
+|  100.00 |
++---------+
+1 row in set (0.001 sec)
+
+MariaDB [deadlock_test]> select balance from accounts where id = 2 for update;
++---------+
+| balance |
++---------+
+|  200.00 |
++---------+
+1 row in set (34.255 sec)
+
+MariaDB [deadlock_test]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [deadlock_test]> select balance from accounts where id = 1 for update;
++---------+
+| balance |
++---------+
+|  100.00 |
++---------+
+1 row in set (0.000 sec)
+
+MariaDB [deadlock_test]> do sleep(5);
+Query OK, 0 rows affected (5.000 sec)
+
+MariaDB [deadlock_test]> select balance form accounts where id = 2 for update;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'accounts where id = 2 for update' at line 1
+MariaDB [deadlock_test]> select balance from accounts where id = 2 for update;
++---------+
+| balance |
++---------+
+|  200.00 |
++---------+
+1 row in set (17.810 sec)
+
+MariaDB [deadlock_test]> exit
